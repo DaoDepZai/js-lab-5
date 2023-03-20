@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/bootstrap5.3/bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css">
+</head>
+<body class="back-weather">
+    <section>
+        <div class="container ">
+        <div class="row " id="data_wt">
+            
+        </div>
+        </div>
+    </section>
+</body>
+<script>
+    var xhttp=new XMLHttpRequest();
+    var html="";    
+    xhttp.onload= function(){
+        var rs= xhttp.responseText;
+        var wt=JSON.parse(rs);
+        wt.list.forEach(x => {
+            let dt_txt= x.dt_txt;
+            let temp=x.main.temp;
+            let des=x.weather[0].description;
+            let iconcode=x.weather[0].icon;
+            let iconurl="http://openweathermap.org/img/w/" + iconcode + ".png";
+            
+            html+=`<div class="col-3 back-col mb-3 mx-2 w-20 ">
+                <div class="row"><p>${dt_txt}</p></div>
+                <div class="row">
+                    <div class="col"><h2>${temp}<sup>o</sup>C</h2>
+                        ${des}</div>
+                    <div class="col "><img  src=${iconurl} alt=""></div>
+                </div>
+            </div>`
+            
+        });
+        let wt_forecast=document.getElementById("data_wt");
+        console.log(wt_forecast,html);
+        wt_forecast.innerHTML=html;
+
+    }
+    xhttp.open("GET","https://api.openweathermap.org/data/2.5/forecast?q=Hanoi,vietnam&appid=09a71427c59d38d6a34f89b47d75975c&units=metric");
+    xhttp.send();
+</script>
+</html>
